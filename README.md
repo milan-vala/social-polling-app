@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Social Polling App
 
-## Getting Started
+A real-time social polling application built with Next.js, TypeScript, Tailwind CSS, and Supabase. Users can create polls, vote in real-time, and view live results with interactive charts.
 
-First, run the development server:
+## Features
+
+- **User Authentication** - Sign up/login with email and password
+- **Poll Creation** - Create multiple-choice polls with custom options
+- **Real-time Voting** - Live vote updates using Supabase Realtime
+- **Results Dashboard** - Interactive charts showing poll results
+- **Responsive Design** - Mobile-first design for all screen sizes
+- **TypeScript** - Full type safety throughout the application
+
+## Tech Stack
+
+- **Frontend**: Next.js 15, React, TypeScript
+- **Styling**: Tailwind CSS
+- **Backend**: Next.js API Routes
+- **Database**: Supabase (PostgreSQL)
+- **Authentication**: Supabase Auth
+- **Real-time**: Supabase Realtime subscriptions
+- **Charts**: Recharts
+- **Deployment**: Vercel
+
+## Prerequisites
+
+- Node.js 18+
+- npm or yarn
+- Supabase account
+
+## Installation
+
+1. Clone the repository:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/milan-vala/social-polling-app.git
+cd social-polling-app
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies
+   `npm install`
+3. Create environment variables `cp .env.example .env.local`
+4. Add Supabase credentials to .env.local
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+NEXT_PUBLIC_SUPABASE_URL=supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=supabase_anon_key
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+5. Run the development server `npm run dev`
+6. Open http://localhost:3000 in browser.
 
-## Learn More
+## Database Schema
 
-To learn more about Next.js, take a look at the following resources:
+The application uses three main tables:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `polls` - Store poll information
+- `poll_options` - Store poll choices/options
+- `votes` - Track user votes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deployment
+This app is designed to be deployed on Vercel:
+1. Connect GitHub repository to Vercel
+2. Add environment variables in Vercel dashboard
+3. Deploy automatically on push to main branch
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Responsive Design
+* **Mobile:** ≤640px
+* **Tablet:** 641px - 1024px
+* **Desktop:** ≥1025px
