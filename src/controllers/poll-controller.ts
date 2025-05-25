@@ -97,6 +97,55 @@ export class PollController {
     }
   }
 
+  static async getPollById(
+    request: NextRequest,
+    pollId: string
+  ): Promise<NextResponse> {
+    const logData = Logger.logRequest(request);
+
+    try {
+      const id = parseInt(pollId);
+      if (isNaN(id)) {
+        Logger.warn("Get poll validation failed - invalid poll ID", { pollId });
+        return ErrorHandler.handleValidationError("Invalid poll ID");
+      }
+
+      Logger.info("Fetching poll by ID", { pollId: id });
+
+      const poll = await PollService.getPollById(id);
+
+      if (!poll) {
+        Logger.warn("Poll not found", { pollId: id });
+        const response: ApiResponse = {
+          data: null,
+          message: "Poll not found",
+          success: false,
+        };
+        return NextResponse.json(response, { status: 404 });
+      }
+
+      Logger.info("Poll retrieved successfully", { pollId: id });
+
+      const response: ApiResponse = {
+        data: poll,
+        message: "Poll retrieved successfully",
+        success: true,
+      };
+
+      const nextResponse = NextResponse.json(response, { status: 200 });
+      Logger.logResponse(logData, nextResponse);
+
+      return nextResponse;
+    } catch (error: any) {
+      Logger.logError(logData, error);
+
+      return ErrorHandler.handleError(error, {
+        method: request.method,
+        url: request.url,
+      });
+    }
+  }
+
   static async updatePoll(
     request: NextRequest,
     pollId: string

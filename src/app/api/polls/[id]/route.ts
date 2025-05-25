@@ -1,6 +1,14 @@
 import { NextRequest } from "next/server";
 import { PollController } from "@/controllers/poll-controller";
 
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  return PollController.getPollById(request, id);
+}
+
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

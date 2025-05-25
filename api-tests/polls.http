@@ -12,6 +12,9 @@ Content-Type: application/json
 ### Get All Polls
 GET http://localhost:3000/api/polls
 
+### Get specific poll by ID
+GET http://localhost:3000/api/polls/12
+
 ### Update poll title only
 PATCH http://localhost:3000/api/polls/13
 Content-Type: application/json
