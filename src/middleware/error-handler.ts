@@ -29,6 +29,11 @@ export class ErrorHandler {
     if (errorMessage.includes("required")) return 400;
     if (errorMessage.includes("Invalid")) return 400;
     if (errorMessage.includes("already")) return 409;
+    if (
+      errorMessage.includes("Email not confirmed") ||
+      errorMessage.includes("confirmation link")
+    )
+      return 401;
     return 500;
   }
 
@@ -38,6 +43,10 @@ export class ErrorHandler {
   ): string {
     if (status === 500) {
       return "Internal server error";
+    }
+
+    if (status === 401 && errorMessage.includes("confirmation")) {
+      return errorMessage;
     }
 
     return errorMessage;
