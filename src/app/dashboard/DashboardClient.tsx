@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { api } from "@/utils/api";
 import { GetPollsResponse } from "@/types/poll";
 import { Plus, Vote, Users, Calendar } from "lucide-react";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
+import { useRealtimePolls } from "@/hooks/useRealtimePolls";
 
 interface DashboardClientProps {
   initialPolls?: GetPollsResponse[];
@@ -14,31 +15,20 @@ interface DashboardClientProps {
 export default function DashboardClient({
   initialPolls = [],
 }: DashboardClientProps) {
-  const [polls, setPolls] = useState<GetPollsResponse[]>(initialPolls);
-  const [loading, setLoading] = useState(false);
+  const polls = useRealtimePolls(initialPolls);
   const [error, setError] = useState("");
   const user = useAuthGuard();
 
-  useEffect(() => {
-    if (initialPolls.length === 0) {
-      fetchPolls();
-    }
-  }, [initialPolls.length]);
-
-  const fetchPolls = async () => {
+  const refreshPolls = async () => {
     try {
-      setLoading(true);
       const response = await api.polls.getPolls();
-
       if (response.success && response.data) {
-        setPolls(response.data);
+        window.location.reload();
       } else {
-        setError(response.message || "Failed to fetch polls");
+        setError(response.message || "Failed to refresh polls");
       }
     } catch (err) {
-      setError("Something went wrong while fetching polls");
-    } finally {
-      setLoading(false);
+      setError("Something went wrong while refreshing polls");
     }
   };
 
@@ -57,7 +47,7 @@ export default function DashboardClient({
     });
   };
 
-  if ((loading && polls.length === 0) || !user) {
+  if (!user) {
     return (
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
@@ -111,6 +101,18 @@ export default function DashboardClient({
       <div className="bg-white shadow rounded-lg">
         <div className="px-6 py-4 border-b border-gray-200">
           <h3 className="text-lg font-medium text-gray-900">Recent Polls</h3>
+          <div className="flex items-center space-x-2">
+            <div className="flex items-center text-sm text-green-600">
+              <div className="w-2 h-2 bg-green-600 rounded-full mr-2 animate-pulse"></div>
+              Live Updates
+            </div>
+            <button
+              onClick={refreshPolls}
+              className="text-sm text-indigo-600 hover:text-indigo-700"
+            >
+              Refresh
+            </button>
+          </div>
         </div>
 
         {polls.length === 0 ? (
