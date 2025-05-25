@@ -68,7 +68,7 @@ export class PollService {
   static async getPollById(pollId: number): Promise<Poll | null> {
     const { data: poll, error } = await supabase
       .from("polls")
-      .select("*")
+      .select("*, poll_options (id, option_text, vote_count)")
       .eq("id", pollId)
       .single();
 

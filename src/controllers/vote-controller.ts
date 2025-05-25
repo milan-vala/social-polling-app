@@ -4,19 +4,26 @@ import { CastVoteRequest, DeleteVoteRequest } from "@/types/vote";
 import { VoteService } from "@/services/vote-service";
 import { Logger } from "@/middleware/logger";
 import { ErrorHandler } from "@/middleware/error-handler";
+import { AuthMiddleware } from "@/middleware/auth-middleware";
 
 export class VoteController {
   static async castVote(request: NextRequest): Promise<NextResponse> {
     const logData = Logger.logRequest(request);
 
     try {
-      const body: CastVoteRequest = await request.json();
-      const { poll_id, option_id, user_id } = body;
+      const authResult = await AuthMiddleware.verifyAuth(request);
+      if (!authResult.success) {
+        return authResult.response!;
+      }
 
-      if (!poll_id || !option_id || !user_id) {
+      const user = authResult.user!;
+      const body: CastVoteRequest = await request.json();
+      const { poll_id, option_id } = body;
+
+      if (!poll_id || !option_id) {
         Logger.warn("Cast vote validation failed", { body });
         return ErrorHandler.handleValidationError(
-          "poll_id, option_id, and user_id are required"
+          "poll_id, option_id are required"
         );
       }
 
@@ -30,7 +37,7 @@ export class VoteController {
         );
       }
 
-      Logger.info("Casting vote", { poll_id, option_id, user_id });
+      Logger.info("Casting vote", { poll_id, option_id, user_id: user.id });
 
       const result = await VoteService.castVote(body);
 
@@ -38,7 +45,7 @@ export class VoteController {
         voteId: result.id,
         poll_id,
         option_id,
-        user_id,
+        user_id: user.id,
       });
 
       const response: ApiResponse = {
