@@ -1,0 +1,23 @@
+### Test signup API
+POST http://localhost:3000/api/auth/signup
+Content-Type: application/json
+
+{
+  "email": "dev.milanvala@gmail.com",
+  "password": "Test@123"
+}
+
+### Test login API
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "dev.milanvala@gmail.com",
+  "password": "Test@123"
+}
+
+### Test logout API
+POST http://localhost:3000/api/auth/logout
+Content-Type: application/json
+
+{}
