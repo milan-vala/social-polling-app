@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { api } from "@/utils/api";
 import { GetPollsResponse } from "@/types/poll";
-import { Plus, Vote, Users, Calendar } from "lucide-react";
+import { Plus, Vote, Users, Calendar, BarChart3 } from "lucide-react";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { useRealtimePolls } from "@/hooks/useRealtimePolls";
 
@@ -135,38 +135,48 @@ export default function DashboardClient({
         ) : (
           <div className="divide-y divide-gray-200">
             {polls.map((poll) => (
-              <div key={poll.id} className="px-6 py-4 hover:bg-gray-50">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <h4 className="text-lg font-medium text-gray-900 mb-2">
+              <div key={poll.id} className="px-4 sm:px-6 py-4 hover:bg-gray-50">
+                <div className="space-y-3">
+                  <div>
+                    <h4 className="text-base sm:text-lg font-medium text-gray-900 leading-tight">
                       {poll.title}
                     </h4>
                     {poll.description && (
-                      <p className="text-gray-600 mb-2">{poll.description}</p>
+                      <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                        {poll.description}
+                      </p>
                     )}
-                    <div className="flex items-center text-sm text-gray-500 space-x-4">
-                      <span className="flex items-center">
-                        <Users className="h-4 w-4 mr-1" />
-                        {getTotalVotes(poll)} votes
-                      </span>
-                      <span className="flex items-center">
-                        <Calendar className="h-4 w-4 mr-1" />
-                        {formatDate(poll.created_at)}
-                      </span>
-                      <span>{poll.poll_options.length} options</span>
-                    </div>
                   </div>
-                  <div className="ml-6 flex items-center space-x-3">
+
+                  <div className="flex flex-col sm:flex-row sm:items-center text-sm text-gray-500 space-y-1 sm:space-y-0 sm:space-x-4">
+                    <span className="flex items-center">
+                      <Users className="h-4 w-4 mr-1 flex-shrink-0" />
+                      {getTotalVotes(poll)}{" "}
+                      {getTotalVotes(poll) === 1 ? "vote" : "votes"}
+                    </span>
+                    <span className="flex items-center">
+                      <Calendar className="h-4 w-4 mr-1 flex-shrink-0" />
+                      {formatDate(poll.created_at)}
+                    </span>
+                    <span className="flex items-center">
+                      <Vote className="h-4 w-4 mr-1 flex-shrink-0" />
+                      {poll.poll_options.length} options
+                    </span>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-2">
                     <Link
                       href={`/polls/${poll.id}`}
-                      className="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                      className="flex-1 sm:flex-none inline-flex items-center justify-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
                     >
+                      <BarChart3 className="h-4 w-4 mr-2" />
                       View Results
                     </Link>
                     <Link
                       href={`/polls/${poll.id}/vote`}
-                      className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                      className="flex-1 sm:flex-none inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 transition-colors"
                     >
+                      <Vote className="h-4 w-4 mr-2" />
                       Vote
                     </Link>
                   </div>
