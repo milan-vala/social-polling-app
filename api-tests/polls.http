@@ -20,3 +20,11 @@ Content-Type: application/json
   "title": "Updated: What's your favorite programming language?",
   "user_id": "83ecfc4f-bb38-48c4-899b-5521eb12fc99"
 }
+
+### Delete a poll
+DELETE http://localhost:3000/api/polls/11
+Content-Type: application/json
+
+{
+  "user_id": "83ecfc4f-bb38-48c4-899b-5521eb12fc99"
+}

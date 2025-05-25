@@ -48,3 +48,7 @@ export interface UpdatePollRequest {
   description?: string;
   user_id: string;
 }
+
+export interface DeletePollRequest {
+  user_id: string;
+}
