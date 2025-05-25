@@ -4,6 +4,7 @@ import {
   ApiResponse,
   CreatePollRequest,
   CreatePollResponse,
+  GetPollsResponse,
 } from "@/types/api";
 import { Poll, PollInsert } from "@/types/database";
 
@@ -91,6 +92,42 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(response, { status: 201 });
   } catch (error) {
     console.error("Create poll error:", error);
+    const response: ApiResponse = {
+      data: null,
+      message: "Internal server error",
+      success: false,
+    };
+    return NextResponse.json(response, { status: 500 });
+  }
+}
+
+export async function GET() {
+  try {
+    const { data: polls, error } = (await supabase
+      .from("polls")
+      .select(`*, poll_options (id, option_text, vote_count)`)
+      .order("created_at", { ascending: false })) as {
+      data: GetPollsResponse[] | null;
+      error: any;
+    };
+
+    if (error) {
+      const response: ApiResponse = {
+        data: null,
+        message: error.message,
+        success: false,
+      };
+      return NextResponse.json(response, { status: 400 });
+    }
+
+    const response: ApiResponse<GetPollsResponse[]> = {
+      data: polls || [],
+      message: "Polls retrieved successfully",
+      success: true,
+    };
+    return NextResponse.json(response, { status: 200 });
+  } catch (error) {
+    console.error("Error while fetching polls: ", error);
     const response: ApiResponse = {
       data: null,
       message: "Internal server error",

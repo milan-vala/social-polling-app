@@ -1,0 +1,13 @@
+### Create New Poll
+POST http://localhost:3000/api/polls
+Content-Type: application/json
+
+{
+  "title": "What's your favorite programming language?",
+  "description": "Choose your preferred language for web development",
+  "user_id": "83ecfc4f-bb38-48c4-899b-5521eb12fc99",
+  "options": ["JavaScript", "TypeScript", "Python", "Go"]
+}
+
+### Get All Polls
+GET http://localhost:3000/api/polls

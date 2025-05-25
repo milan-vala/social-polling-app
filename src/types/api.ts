@@ -28,3 +28,17 @@ export interface CreatePollResponse {
     created_at: string;
   }[];
 }
+
+export interface GetPollsResponse {
+  id: number;
+  title: string;
+  description: string | null;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+  poll_options: {
+    id: number;
+    option_text: string;
+    vote_count: number;
+  }[];
+}
