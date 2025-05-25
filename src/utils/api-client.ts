@@ -1,4 +1,5 @@
 import { ApiResponse } from "@/types/api";
+import { authUtils } from "./auth";
 
 interface ApiOptions<T = any> {
   method?: "GET" | "POST" | "PATCH" | "DELETE";
@@ -18,13 +19,19 @@ export class ApiClient {
     options: ApiOptions<TBody> = {}
   ): Promise<ApiResponse<TResponse>> {
     const url = `${this.baseUrl}${endpoint}`;
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      ...options.headers,
+    };
+
+    const token = authUtils.getAccessToken();
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
 
     const config: RequestInit = {
-      method: options.method,
-      headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
+      method: options.method || "GET",
+      headers,
     };
 
     if (options.body) {

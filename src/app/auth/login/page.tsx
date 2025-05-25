@@ -39,7 +39,12 @@ export default function LoginPage() {
       if (!response.success) {
         setError(response.message);
       } else if (response.data) {
-        authUtils.setUser(response.data.user);
+        authUtils.setUser({
+          id: response.data.user.id,
+          email: response.data.user.email,
+          created_at: response.data.user.created_at,
+          access_token: response.data.session.access_token,
+        });
         router.push("/dashboard");
       }
     } catch (err) {

@@ -8,16 +8,25 @@ import {
 import { PollService } from "@/services/poll-service";
 import { Logger } from "@/middleware/logger";
 import { ErrorHandler } from "@/middleware/error-handler";
+import { AuthService } from "@/services/auth-service";
 
 export class PollController {
   static async createPoll(request: NextRequest): Promise<NextResponse> {
     const logData = Logger.logRequest(request);
 
     try {
-      const body: CreatePollRequest = await request.json();
-      const { title, options, user_id } = body;
+      const authHeader = request.headers.get("authorization");
+      if (!authHeader?.startsWith("Bearer ")) {
+        return ErrorHandler.handleAuthError("Authentication required");
+      }
 
-      if (!title || !options || !user_id) {
+      const accessToken = authHeader.split(" ")[1];
+      const user = await AuthService.verifySession(accessToken);
+
+      const body: CreatePollRequest = await request.json();
+      const { title, options } = body;
+
+      if (!title || !options || !user.id) {
         Logger.warn("Create poll validation failed", { body });
         return ErrorHandler.handleValidationError(
           "Title, options, and user_id are required"
@@ -35,15 +44,22 @@ export class PollController {
 
       Logger.info("Creating poll", {
         title,
-        user_id,
+        user_id: user.id,
         optionsCount: options.length,
       });
 
-      const result = await PollService.createPoll(body);
+      const pollData = {
+        title,
+        description: body.description,
+        options,
+        user_id: user.id,
+      };
+
+      const result = await PollService.createPoll(pollData);
 
       Logger.info("Poll created successfully", {
         pollId: result.poll.id,
-        user_id,
+        user_id: user.id,
       });
 
       const response: ApiResponse = {

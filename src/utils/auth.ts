@@ -25,4 +25,9 @@ export const authUtils = {
   isLoggedIn: (): boolean => {
     return !!authUtils.getUser();
   },
+
+  getAccessToken: (): string | null => {
+    const user = authUtils.getUser();
+    return user?.access_token || null;
+  },
 };

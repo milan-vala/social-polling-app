@@ -70,29 +70,16 @@ export class AuthService {
     }
   }
 
-  static async getCurrentUser() {
+  static async verifySession(accessToken: string) {
     const {
       data: { user },
       error,
-    } = await supabase.auth.getUser();
+    } = await supabase.auth.getUser(accessToken);
 
-    if (error) {
-      throw new Error(error.message);
+    if (error || !user) {
+      throw new Error("Invalid or expired session");
     }
 
     return user;
-  }
-
-  static async refreshSession() {
-    const {
-      data: { session },
-      error,
-    } = await supabase.auth.refreshSession();
-
-    if (error) {
-      throw new Error(error.message);
-    }
-
-    return session;
   }
 }
