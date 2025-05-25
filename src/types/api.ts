@@ -42,3 +42,9 @@ export interface GetPollsResponse {
     vote_count: number;
   }[];
 }
+
+export interface UpdatePollRequest {
+  title?: string;
+  description?: string;
+  user_id: string;
+}
