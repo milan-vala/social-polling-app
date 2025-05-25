@@ -2,6 +2,9 @@ import Header from "@/components/header";
 import DashboardClient from "./DashboardClient";
 import { getApiUrl } from "@/utils/url";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 async function getPolls() {
   try {
     const res = await fetch(getApiUrl("/api/polls"), {
