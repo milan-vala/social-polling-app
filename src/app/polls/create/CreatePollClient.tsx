@@ -109,7 +109,7 @@ export default function CreatePollClient() {
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black font-normal"
             placeholder="What's your favorite programming language?"
             maxLength={200}
           />
@@ -130,7 +130,7 @@ export default function CreatePollClient() {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black font-normal"
             placeholder="Provide more context about your poll..."
             maxLength={500}
           />
@@ -156,7 +156,7 @@ export default function CreatePollClient() {
                 type="text"
                 value={option}
                 onChange={(e) => updateOption(index, e.target.value)}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black font-normal bg-white"
                 placeholder={`Option ${index + 1}`}
                 maxLength={100}
               />
