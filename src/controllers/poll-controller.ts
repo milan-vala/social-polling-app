@@ -8,21 +8,19 @@ import {
 import { PollService } from "@/services/poll-service";
 import { Logger } from "@/middleware/logger";
 import { ErrorHandler } from "@/middleware/error-handler";
-import { AuthService } from "@/services/auth-service";
+import { AuthMiddleware } from "@/middleware/auth-middleware";
 
 export class PollController {
   static async createPoll(request: NextRequest): Promise<NextResponse> {
     const logData = Logger.logRequest(request);
 
     try {
-      const authHeader = request.headers.get("authorization");
-      if (!authHeader?.startsWith("Bearer ")) {
-        return ErrorHandler.handleAuthError("Authentication required");
+      const authResult = await AuthMiddleware.verifyAuth(request);
+      if (!authResult.success) {
+        return authResult.response!;
       }
 
-      const accessToken = authHeader.split(" ")[1];
-      const user = await AuthService.verifySession(accessToken);
-
+      const user = authResult.user!;
       const body: CreatePollRequest = await request.json();
       const { title, options } = body;
 
