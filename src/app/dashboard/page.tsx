@@ -1,7 +1,6 @@
 import Header from "@/components/header";
 import DashboardClient from "./DashboardClient";
 import { getApiUrl } from "@/utils/url";
-import AuthGuard from "@/components/auth/AuthGuard";
 
 async function getPolls() {
   try {
@@ -25,15 +24,13 @@ export default async function DashboardPage() {
   const initialPolls = await getPolls();
 
   return (
-    // <AuthGuard>
-      <div className="min-h-screen bg-gray-50">
-        <Header
-          title="Dashboard"
-          subtitle="Manage your polls and view results"
-          showCreateButton={true}
-        />
-        <DashboardClient initialPolls={initialPolls} />
-      </div>
-    // </AuthGuard>
+    <div className="min-h-screen bg-gray-50">
+      <Header
+        title="Dashboard"
+        subtitle="Manage your polls and view results"
+        showCreateButton={true}
+      />
+      <DashboardClient initialPolls={initialPolls} />
+    </div>
   );
 }

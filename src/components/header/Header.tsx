@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { IHeader } from "./IHeader";
-import { useAuth } from "@/contexts/AuthContext";
+import { authUtils } from "@/utils/auth";
 
 export default function Header({
   title,
@@ -12,11 +12,10 @@ export default function Header({
   showCreateButton = true,
 }: IHeader) {
   const router = useRouter();
-  const { signOut } = useAuth();
 
   const handleLogout = async () => {
     try {
-      await signOut();
+      authUtils.removeUser();
       router.push("/auth/login");
     } catch (err) {
       console.error("Logout failed:", err);

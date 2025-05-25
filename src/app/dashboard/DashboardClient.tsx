@@ -5,6 +5,7 @@ import Link from "next/link";
 import { api } from "@/utils/api";
 import { GetPollsResponse } from "@/types/poll";
 import { Plus, Vote, Users, Calendar } from "lucide-react";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 
 interface DashboardClientProps {
   initialPolls?: GetPollsResponse[];
@@ -16,6 +17,7 @@ export default function DashboardClient({
   const [polls, setPolls] = useState<GetPollsResponse[]>(initialPolls);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const user = useAuthGuard();
 
   useEffect(() => {
     if (initialPolls.length === 0) {
@@ -55,12 +57,12 @@ export default function DashboardClient({
     });
   };
 
-  if (loading && polls.length === 0) {
+  if ((loading && polls.length === 0) || !user) {
     return (
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading polls...</p>
+          <p className="mt-4 text-gray-600">Loading...</p>
         </div>
       </div>
     );
