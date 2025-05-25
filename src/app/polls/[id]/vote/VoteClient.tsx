@@ -105,19 +105,22 @@ export default function VoteClient({ poll }: VoteClientProps) {
   }
 
   return (
-    <main className="max-w-2xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+    <main className="max-w-2xl mx-auto py-4 sm:py-6 px-4 sm:px-6 lg:px-8">
       <div className="bg-white shadow rounded-lg">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <div className="px-4 sm:px-6 py-4 border-b border-gray-200">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 leading-tight">
             {poll.title}
           </h1>
           {poll.description && (
-            <p className="text-gray-600 mb-4">{poll.description}</p>
+            <p className="text-sm sm:text-base text-gray-600 mb-4">
+              {poll.description}
+            </p>
           )}
-          <div className="flex items-center text-sm text-gray-500 space-x-4">
+
+          <div className="flex flex-col sm:flex-row sm:items-center text-sm text-gray-500 space-y-1 sm:space-y-0 sm:space-x-4">
             <span className="flex items-center">
               <Users className="h-4 w-4 mr-1" />
-              {getTotalVotes()} votes
+              {getTotalVotes()} {getTotalVotes() === 1 ? "vote" : "votes"}
             </span>
             <span className="flex items-center">
               <Calendar className="h-4 w-4 mr-1" />
@@ -127,9 +130,9 @@ export default function VoteClient({ poll }: VoteClientProps) {
           </div>
         </div>
 
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           {error && (
-            <div className="mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            <div className="mb-4 sm:mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded text-sm">
               {error}
             </div>
           )}
@@ -138,7 +141,7 @@ export default function VoteClient({ poll }: VoteClientProps) {
             {poll.poll_options.map((option) => (
               <div
                 key={option.id}
-                className={`relative flex items-center p-4 border rounded-lg cursor-pointer transition-colors ${
+                className={`relative flex items-start p-3 sm:p-4 border rounded-lg cursor-pointer transition-colors ${
                   selectedOption === option.id
                     ? "border-indigo-500 bg-indigo-50"
                     : "border-gray-300 hover:border-gray-400 hover:bg-gray-50"
@@ -151,32 +154,33 @@ export default function VoteClient({ poll }: VoteClientProps) {
                   value={option.id}
                   checked={selectedOption === option.id}
                   onChange={() => setSelectedOption(option.id)}
-                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 mt-0.5 flex-shrink-0"
                 />
                 <label className="ml-3 flex-1 cursor-pointer">
-                  <span className="block text-sm font-medium text-gray-900">
+                  <span className="block text-sm sm:text-base font-medium text-gray-900 leading-tight">
                     {option.option_text}
                   </span>
-                  <span className="block text-sm text-gray-500">
-                    {option.vote_count} votes
+                  <span className="block text-xs sm:text-sm text-gray-500 mt-1">
+                    {option.vote_count}{" "}
+                    {option.vote_count === 1 ? "vote" : "votes"}
                   </span>
                 </label>
               </div>
             ))}
           </div>
 
-          <div className="mt-6 flex justify-end space-x-3">
+          <div className="mt-6 flex flex-col sm:flex-row justify-end gap-3 sm:space-x-3">
             <button
               type="button"
               onClick={() => router.push("/dashboard")}
-              className="px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+              className="w-full sm:w-auto px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 order-2 sm:order-1"
             >
               Cancel
             </button>
             <button
               onClick={handleVote}
               disabled={loading || selectedOption === null}
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50"
+              className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 order-1 sm:order-2"
             >
               <Vote className="h-4 w-4 mr-2" />
               {loading ? "Casting Vote..." : "Cast Vote"}
